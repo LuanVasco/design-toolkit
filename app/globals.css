@@ -1,0 +1,75 @@
+/* Importação unificada de todas as famílias do BrandKit */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Lato:wght@400;700&family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;600&family=Playfair+Display:ital,wght@0,700;1,700&family=Roboto:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap');
+
+/* A nova diretiva única e unificada do Tailwind v4 */
+@import "tailwindcss";
+
+/* ==========================================
+   Classes Globais Customizadas (CSS Puro)
+   ========================================== */
+
+.glass-panel {
+  /* Fundo escuro cor de pedra com uma borda ultra-fina dourada */
+  background-color: rgba(24, 24, 27, 0.7); /* zinc-900 */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.15); /* Ouro Clássico */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.dark-input {
+  background-color: rgba(9, 9, 11, 0.8); /* zinc-950 */
+  border: 1px solid rgba(63, 63, 70, 0.8); /* zinc-700 */
+  color: #f4f4f5; /* zinc-50 */
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.dark-input:focus {
+  border-color: #d4af37; /* Ouro */
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+.font-serif-premium {
+  font-family: 'Playfair Display', serif;
+}
+
+/* ==========================================
+   Custom Scrollbar (Estética Premium)
+   ========================================== */
+::-webkit-scrollbar { height: 6px; width: 6px; }
+::-webkit-scrollbar-track { background: #09090b; }
+::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #d4af37; }
+
+/* No final do globals.css */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+@layer utilities {
+  /* Esconde a barra de rolagem mas mantém a funcionalidade */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
+/* --- MOTOR TIPOGRÁFICO DO DESIGNGEN OS --- */
+
+.carousel-slide-unit h1,
+.carousel-slide-unit h2,
+.carousel-slide-unit h3 {
+  font-family: var(--font-title, 'Inter', sans-serif) !important;
+  /* Multiplica o tamanho dinâmico (ex: 38px) pela escala do usuário (ex: 1.1) */
+  font-size: calc(var(--title-size, 34px) * var(--font-scale, 1)) !important;
+  line-height: var(--title-leading, 1.05) !important;
+}
+
+.carousel-slide-unit p {
+  font-family: var(--font-body, 'Inter', sans-serif) !important;
+  font-size: calc(var(--desc-size, 14px) * var(--font-scale, 1)) !important;
+  line-height: var(--desc-leading, 1.5) !important;
+}
