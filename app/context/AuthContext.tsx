@@ -16,6 +16,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>; // 👈 1. ADICIONADO AO CONTRATO
   logout: () => void;
 }
 
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Simula a verificação de sessão ao carregar a página (Hydration)
+  // Verificação de sessão ao carregar a página
   useEffect(() => {
     const checkSession = () => {
       const storedUser = localStorage.getItem("@estudiocarrossel:user");
@@ -38,9 +39,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkSession();
   }, []);
 
-  // Função de Login Desacoplada
+  // Login Tradicional
   const login = async (email: string, password: string) => {
-    // Aqui você plugará a API real (Supabase, Firebase, etc.)
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         if (email && password) {
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             id: "usr_12345",
             name: "Luan",
             email: email,
-            plan: "PRO", // Mockando um usuário pagante para liberar as features High-End
+            plan: "PRO",
           };
           setUser(mockUser);
           localStorage.setItem("@estudiocarrossel:user", JSON.stringify(mockUser));
@@ -56,7 +56,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
           reject(new Error("Credenciais inválidas."));
         }
-      }, 1500); // Simulando delay de rede
+      }, 1500);
+    });
+  };
+
+  // 👇 2. IMPLEMENTAÇÃO DO LOGIN COM GOOGLE (MOCK)
+  const loginWithGoogle = async () => {
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        const mockUser: User = {
+          id: "google_12345",
+          name: "Luan (Google)",
+          email: "luan@google.com",
+          plan: "FREE",
+        };
+        setUser(mockUser);
+        localStorage.setItem("@estudiocarrossel:user", JSON.stringify(mockUser));
+        resolve();
+      }, 1500);
     });
   };
 
@@ -67,13 +84,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      isAuthenticated: !!user, 
+      isLoading, 
+      login, 
+      loginWithGoogle, // 👈 3. DISPONIBILIZADO NO PROVIDER
+      logout 
+    }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Hook customizado para facilitar a importação
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

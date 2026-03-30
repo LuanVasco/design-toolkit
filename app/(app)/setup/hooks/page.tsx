@@ -4,22 +4,28 @@ import React from "react";
 import { useBrandKit } from "@/app/context/BrandKitContext";
 
 export default function HooksSetupPage() {
-  const brandKit = useBrandKit();
-
+  const { brandKit, updateBrandKit } = useBrandKit();
+  
   // Função para aplicar presets de cores rápidos
   const applyPreset = (theme: "dark" | "gold" | "light") => {
     if (theme === "dark") {
-      brandKit.setHookBgColor("#09090b");
-      brandKit.setHookTitleColor("#d4af37");
-      brandKit.setHookSubtitleColor("#ffffff");
+      updateBrandKit({
+        hookBgColor: "#09090b",
+        hookTitleColor: "#d4af37",
+        hookSubtitleColor: "#ffffff"
+      });
     } else if (theme === "gold") {
-      brandKit.setHookBgColor("#d4af37");
-      brandKit.setHookTitleColor("#09090b");
-      brandKit.setHookSubtitleColor("#18181b");
-    } else {
-      brandKit.setHookBgColor("#ffffff");
-      brandKit.setHookTitleColor("#000000");
-      brandKit.setHookSubtitleColor("#4b5563");
+      updateBrandKit({
+        hookBgColor: "#d4af37",
+        hookTitleColor: "#09090b",
+        hookSubtitleColor: "#18181b"
+      });
+    } else if (theme === "light") {
+      updateBrandKit({
+        hookBgColor: "#ffffff",
+        hookTitleColor: "#d4af37",
+        hookSubtitleColor: "#18181b"
+      });
     }
   };
 
@@ -40,7 +46,13 @@ export default function HooksSetupPage() {
         <div className="flex flex-col items-end gap-2">
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Status do Hook</span>
           <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" className="sr-only peer" checked={brandKit.hookEnabled} onChange={(e) => brandKit.setHookEnabled(e.target.checked)} />
+            <input 
+              type="checkbox" 
+              className="sr-only peer" 
+              checked={brandKit.hookEnabled} 
+              // 👇 ATUALIZADO
+              onChange={(e) => updateBrandKit({ hookEnabled: e.target.checked })} 
+            />
             <div className="w-14 h-7 bg-zinc-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-[#d4af37] after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-5 after:w-6 after:transition-all shadow-inner"></div>
           </label>
         </div>
@@ -63,7 +75,8 @@ export default function HooksSetupPage() {
               <label className="text-[11px] font-black text-[#d4af37] uppercase tracking-[0.3em] mb-6 block">1. Estratégia de Conversão</label>
               <div className="grid grid-cols-2 gap-4">
                 <button 
-                  onClick={() => { brandKit.setHookType("save"); brandKit.setHookTitle("SALVE PARA CONSULTAR"); }}
+                  // 👇 ATUALIZADO
+                  onClick={() => updateBrandKit({ hookType: "save", hookTitle: "SALVE PARA CONSULTAR" })}
                   className={`group relative p-8 rounded-[2rem] border-2 transition-all text-left overflow-hidden ${brandKit.hookType === "save" ? "border-[#d4af37] bg-zinc-900 shadow-[0_0_30px_rgba(212,175,55,0.1)]" : "border-zinc-800 bg-zinc-950/50 hover:border-zinc-700"}`}
                 >
                   <div className="relative z-10">
@@ -75,7 +88,8 @@ export default function HooksSetupPage() {
                 </button>
 
                 <button 
-                  onClick={() => { brandKit.setHookType("follow"); brandKit.setHookTitle("SIGA PARA EVOLUIR"); }}
+                  // 👇 ATUALIZADO
+                  onClick={() => updateBrandKit({ hookType: "follow", hookTitle: "SIGA PARA EVOLUIR" })}
                   className={`group relative p-8 rounded-[2rem] border-2 transition-all text-left overflow-hidden ${brandKit.hookType === "follow" ? "border-[#d4af37] bg-zinc-900 shadow-[0_0_30px_rgba(212,175,55,0.1)]" : "border-zinc-800 bg-zinc-950/50 hover:border-zinc-700"}`}
                 >
                   <div className="relative z-10">
@@ -103,14 +117,26 @@ export default function HooksSetupPage() {
                 <div className="space-y-2">
                   <span className="text-[9px] font-black text-zinc-600 uppercase">Fundo do Slide</span>
                   <div className="flex items-center gap-3 bg-zinc-950 p-3 rounded-2xl border border-zinc-800">
-                    <input type="color" value={brandKit.hookBgColor} onChange={(e) => brandKit.setHookBgColor(e.target.value)} className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer" />
+                    <input 
+                      type="color" 
+                      value={brandKit.hookBgColor} 
+                      // 👇 ATUALIZADO
+                      onChange={(e) => updateBrandKit({ hookBgColor: e.target.value })} 
+                      className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer" 
+                    />
                     <span className="text-xs font-mono text-zinc-500 uppercase">{brandKit.hookBgColor}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <span className="text-[9px] font-black text-zinc-600 uppercase">Cor dos Textos</span>
                   <div className="flex items-center gap-3 bg-zinc-950 p-3 rounded-2xl border border-zinc-800">
-                    <input type="color" value={brandKit.hookTitleColor} onChange={(e) => brandKit.setHookTitleColor(e.target.value)} className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer" />
+                    <input 
+                      type="color" 
+                      value={brandKit.hookTitleColor} 
+                      // 👇 ATUALIZADO
+                      onChange={(e) => updateBrandKit({ hookTitleColor: e.target.value })} 
+                      className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer" 
+                    />
                     <span className="text-xs font-mono text-zinc-500 uppercase">{brandKit.hookTitleColor}</span>
                   </div>
                 </div>
@@ -119,16 +145,30 @@ export default function HooksSetupPage() {
               <div className="mt-8 space-y-4 pt-8 border-t border-zinc-800/50">
                 <div className="space-y-2">
                   <span className="text-[9px] font-black text-zinc-600 uppercase">Título da Chamada</span>
-                  <input type="text" value={brandKit.hookTitle} onChange={(e) => brandKit.setHookTitle(e.target.value)} className="dark-input w-full p-4 rounded-2xl text-lg font-black uppercase tracking-tight" placeholder="Ex: SALVE PARA DEPOIS" />
+                  <input 
+                    type="text" 
+                    value={brandKit.hookTitle} 
+                    // 👇 ATUALIZADO
+                    onChange={(e) => updateBrandKit({ hookTitle: e.target.value })} 
+                    className="dark-input w-full p-4 rounded-2xl text-lg font-black uppercase tracking-tight" 
+                    placeholder="Ex: SALVE PARA DEPOIS" 
+                  />
                 </div>
                 <div className="space-y-2">
                   <span className="text-[9px] font-black text-zinc-600 uppercase">Subtítulo Persuasivo</span>
-                  <textarea rows={3} value={brandKit.hookSubtitle} onChange={(e) => brandKit.setHookSubtitle(e.target.value)} className="dark-input w-full p-4 rounded-2xl text-sm resize-none leading-relaxed" placeholder="Diga por que eles devem agir agora..."></textarea>
+                  <textarea 
+                    rows={3} 
+                    value={brandKit.hookSubtitle} 
+                    // 👇 ATUALIZADO
+                    onChange={(e) => updateBrandKit({ hookSubtitle: e.target.value })} 
+                    className="dark-input w-full p-4 rounded-2xl text-sm resize-none leading-relaxed" 
+                    placeholder="Diga por que eles devem agir agora..."
+                  ></textarea>
                 </div>
               </div>
             </section>
 
-            {/* Adicione este bloco dentro do setup/hooks/page.tsx, na parte de controles */}
+            {/* 3. ORDEM NO CARROSSEL */}
             <section className="glass-panel p-8 rounded-[2.5rem] border border-zinc-800/50 mt-8">
                 <div className="flex justify-between items-center mb-6">
                     <label className="text-[11px] font-black text-[#d4af37] uppercase tracking-[0.3em]">
@@ -143,9 +183,10 @@ export default function HooksSetupPage() {
                     <input 
                     type="range" 
                     min="0" 
-                    max="10" // Limitamos a 10 slides
+                    max="10" 
                     value={brandKit.hookPosition > 10 ? 10 : brandKit.hookPosition} 
-                    onChange={(e) => brandKit.setHookPosition(Number(e.target.value))}
+                    // 👇 ATUALIZADO
+                    onChange={(e) => updateBrandKit({ hookPosition: Number(e.target.value) })}
                     className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-[#d4af37]"
                     />
                     <div className="flex justify-between text-[9px] font-black text-zinc-600 uppercase tracking-widest">
@@ -154,7 +195,7 @@ export default function HooksSetupPage() {
                     <span>Final</span>
                     </div>
                 </div>
-                </section>
+            </section>
           </div>
 
           {/* COLUNA DE PREVIEW FIXO (LARGURA 5) */}
@@ -172,13 +213,13 @@ export default function HooksSetupPage() {
                 {/* Texturas sutis no fundo */}
                 <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
                 
-                <div className="relative z-10">
-                  <h2 className="text-4xl font-black uppercase mb-6 leading-[1.1] font-serif-premium tracking-tighter" style={{ color: brandKit.hookTitleColor }}>
-                    {brandKit.hookTitle}
+                <div className="relative z-10 w-full">
+                  <h2 className="text-4xl font-black uppercase mb-6 leading-[1.1] font-serif-premium tracking-tighter break-words" style={{ color: brandKit.hookTitleColor }}>
+                    {brandKit.hookTitle || "TÍTULO AQUI"}
                   </h2>
                   
-                  <p className="text-base font-bold leading-relaxed mb-10" style={{ color: brandKit.hookSubtitleColor || brandKit.hookTitleColor + 'CC' }}>
-                    {brandKit.hookSubtitle}
+                  <p className="text-base font-bold leading-relaxed mb-10 break-words" style={{ color: brandKit.hookSubtitleColor || brandKit.hookTitleColor + 'CC' }}>
+                    {brandKit.hookSubtitle || "Subtítulo do seu CTA aparecerá aqui."}
                   </p>
 
                   <div 

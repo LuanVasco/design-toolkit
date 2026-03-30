@@ -5,9 +5,21 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Rocket, Briefcase, User, Upload, 
   Target, ArrowRight, ArrowLeft, Loader2, HelpCircle,
-  TrendingUp, BookOpen, ShoppingCart
+  TrendingUp, BookOpen, ShoppingCart, Sparkles, 
+  Layout, Type, Maximize
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+// --- NOVAS ESTRUTURAS DE COMPOSIÇÃO ---
+const LOGO_STRATEGIES = [
+  { id: "ai", label: "Gerar com IA", icon: Sparkles, desc: "Design paramétrico exclusivo" },
+  { id: "upload", label: "Já tenho Logo", icon: Upload, desc: "Usar meu arquivo próprio" },
+];
+
+const COMPOSITIONS = [
+  { id: "stacked", label: "Vertical", icon: Layout, desc: "Símbolo sobre o texto" },
+  { id: "inline", label: "Horizontal", icon: Maximize, desc: "Símbolo ao lado" },
+];
 
 const PERSONA_TONES = [
   { id: "premium", label: "Premium", desc: "Exclusivo e Minimalista", color: "#d4af37" },
@@ -21,17 +33,17 @@ const NICHES = [
 ];
 
 const GOALS = [
-  { id: "autoridade", label: "Construir Autoridade", icon: Target },
-  { id: "leads", label: "Gerar Leads/Contatos", icon: TrendingUp },
-  { id: "vendas", label: "Vender Produtos", icon: ShoppingCart },
-  { id: "educacao", label: "Educar Audiência", icon: BookOpen },
+  { id: "autoridade", label: "Autoridade", icon: Target },
+  { id: "leads", label: "Leads", icon: TrendingUp },
+  { id: "vendas", label: "Vendas", icon: ShoppingCart },
+  { id: "educacao", label: "Educação", icon: BookOpen },
 ];
 
 interface WizardControlsProps {
   step: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   draft: any;
-  handleUpdate: (field: string, value: string) => void;
+  handleUpdate: (field: string, value: any) => void;
   onComplete: () => void;
   loading: boolean;
 }
@@ -54,10 +66,10 @@ export const WizardControls = ({ step, setStep, draft, handleUpdate, onComplete,
           <Rocket size={18} fill="currentColor" />
         </div>
         <div>
-          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-zinc-500 block">DesignGen Setup</span>
+          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-zinc-500 block">DesignGen Architecture</span>
           <div className="flex gap-1 mt-1">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className={`h-1 rounded-full transition-all duration-500 ${step >= i ? 'w-4 bg-[#d4af37]' : 'w-1 bg-white/10'}`} />
+              <div key={i} className={`h-1 rounded-full transition-all duration-500 ${step >= i ? 'w-5 bg-[#d4af37]' : 'w-1.5 bg-white/10'}`} />
             ))}
           </div>
         </div>
@@ -66,60 +78,69 @@ export const WizardControls = ({ step, setStep, draft, handleUpdate, onComplete,
       <div className="max-w-md w-full mx-auto py-12 flex-1 flex flex-col justify-center">
         <AnimatePresence mode="wait">
           
-          {/* ================= PASSO 1: NOME & NICHO ================= */}
+          {/* PASSO 1: FUNDAÇÃO */}
           {step === 1 && (
             <motion.div key="s1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-10">
               <div className="space-y-4">
-                <h1 className="text-5xl font-black uppercase tracking-tighter leading-tight italic">
-                  O seu <span style={{ color: draft.brandColor }} className="transition-colors">Espaço.</span>
-                </h1>
-                <p className="text-zinc-500 text-sm font-medium">Nome e área de atuação para personalizarmos sua IA.</p>
+                <h1 className="text-5xl font-black uppercase tracking-tighter leading-[0.9] italic">O <span style={{ color: draft.brandColor }} className="transition-colors">Início.</span></h1>
+                <p className="text-zinc-500 text-sm font-medium">Defina a base da sua presença digital.</p>
               </div>
               
               <div className="space-y-6">
-                <div className="relative group">
-                  <Briefcase className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-[#d4af37] transition-colors" size={20} />
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600 ml-1">Nome da Marca</label>
                   <input 
-                    type="text" placeholder="Nome da sua marca..."
-                    value={draft.brandName} onChange={(e) => handleUpdate("brandName", e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-3xl py-5 pl-16 pr-6 text-lg font-bold outline-none focus:border-[#d4af37]/40 transition-all placeholder:text-zinc-700 text-white"
+                    type="text" value={draft.brandName} onChange={(e) => handleUpdate("brandName", e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 px-6 text-lg font-bold outline-none focus:border-[#d4af37]/40 transition-all text-white"
+                    placeholder="Ex: Luan Strategy"
                   />
                 </div>
 
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Qual o seu mercado?</label>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600 ml-1">Mercado de Atuação</label>
                   <select 
-                    value={draft.niche || ""} 
-                    onChange={(e) => handleUpdate("niche", e.target.value)}
+                    value={draft.niche || ""} onChange={(e) => handleUpdate("niche", e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-sm font-bold text-zinc-300 outline-none appearance-none focus:border-[#d4af37]/40 transition-all cursor-pointer"
                   >
-                    <option value="" disabled className="bg-zinc-900 text-zinc-500">Selecione seu nicho...</option>
-                    {NICHES.map(niche => (
-                      <option key={niche} value={niche} className="bg-zinc-900 text-white">{niche}</option>
-                    ))}
+                    <option value="" disabled>Selecione seu nicho...</option>
+                    {NICHES.map(n => <option key={n} value={n} className="bg-zinc-900">{n}</option>)}
                   </select>
                 </div>
               </div>
             </motion.div>
           )}
 
-          {/* ================= PASSO 2: VISUAL ================= */}
+          {/* PASSO 2: DNA VISUAL (IA vs ESTRUTURA) */}
           {step === 2 && (
-            <motion.div key="s2" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-10">
-              <h1 className="text-5xl font-black uppercase tracking-tighter leading-tight">Suas <span style={{ color: draft.brandColor }} className="italic transition-colors">Cores.</span></h1>
-              <div className="space-y-8">
-                <div className="grid grid-cols-6 gap-3">
-                  {["#d4af37", "#3b82f6", "#ef4444", "#10b981", "#a855f7"].map(c => (
-                    <button key={c} onClick={() => handleUpdate("brandColor", c)} className={`aspect-square rounded-full transition-all ${draft.brandColor === c ? 'ring-4 ring-white ring-offset-4 ring-offset-black scale-90' : 'opacity-40 hover:opacity-100'}`} style={{ backgroundColor: c }} />
+            <motion.div key="s2" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
+              <h1 className="text-5xl font-black uppercase tracking-tighter leading-[0.9]">Seu <span style={{ color: draft.brandColor }} className="italic">DNA.</span></h1>
+              
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-3">
+                  {LOGO_STRATEGIES.map(s => (
+                    <button 
+                      key={s.id} onClick={() => handleUpdate("logoStrategy", s.id)}
+                      className={`p-4 rounded-2xl border text-left transition-all flex flex-col gap-3 ${draft.logoStrategy === s.id ? 'bg-white/10 border-[#d4af37]/50' : 'bg-transparent border-white/5'}`}
+                    >
+                      <s.icon size={18} className={draft.logoStrategy === s.id ? "text-[#d4af37]" : "text-zinc-600"} />
+                      <div>
+                        <span className="block text-[10px] font-black uppercase tracking-wider text-white">{s.label}</span>
+                        <span className="text-[8px] text-zinc-500 uppercase font-bold">{s.desc}</span>
+                      </div>
+                    </button>
                   ))}
-                  <input type="color" value={draft.brandColor} onChange={(e) => handleUpdate("brandColor", e.target.value)} className="w-full h-full rounded-full cursor-pointer bg-transparent border-none p-0 overflow-hidden opacity-40 hover:opacity-100 transition-opacity" />
                 </div>
-                <div className="space-y-4">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Tipografia (Títulos)</label>
-                  <div className="grid grid-cols-1 gap-3">
-                    {["Inter", "Bebas Neue", "Playfair Display"].map(font => (
-                      <button key={font} onClick={() => handleUpdate("titleFont", font)} className={`p-4 rounded-2xl border text-left transition-all ${draft.titleFont === font ? 'bg-white/10 border-white/30' : 'bg-transparent border-white/5 hover:bg-white/5'}`}>
-                        <span className="text-lg font-black uppercase text-white" style={{ fontFamily: font }}>{font}</span>
+
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600 ml-1">Composição de Layout</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {COMPOSITIONS.map(c => (
+                      <button 
+                        key={c.id} onClick={() => handleUpdate("composition", c.id)}
+                        className={`p-4 rounded-2xl border text-left transition-all flex items-center gap-3 ${draft.composition === c.id ? 'bg-white/10 border-[#d4af37]/50' : 'bg-transparent border-white/5'}`}
+                      >
+                        <c.icon size={16} className={draft.composition === c.id ? "text-[#d4af37]" : "text-zinc-600"} />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-white">{c.label}</span>
                       </button>
                     ))}
                   </div>
@@ -128,81 +149,63 @@ export const WizardControls = ({ step, setStep, draft, handleUpdate, onComplete,
             </motion.div>
           )}
 
-          {/* ================= PASSO 3: MÍDIA ================= */}
+          {/* PASSO 3: CORES & FONTES */}
           {step === 3 && (
-            <motion.div key="s3" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-10">
-              <h1 className="text-5xl font-black uppercase tracking-tighter leading-tight">Sua <span style={{ color: draft.brandColor }} className="italic transition-colors">Presença.</span></h1>
-              <div className="grid grid-cols-2 gap-6">
-                
-                <div className="space-y-3 text-center">
-                  <input type="file" accept="image/*" ref={logoInputRef} onChange={(e) => handleImage(e, 'logoUrl')} className="hidden" />
-                  <div onClick={() => logoInputRef.current?.click()} className="aspect-square rounded-[2rem] bg-zinc-900 border-2 border-dashed border-white/10 flex flex-col items-center justify-center p-6 group hover:border-[#d4af37]/50 transition-all cursor-pointer relative overflow-hidden">
-                     {draft.logoUrl ? <img src={draft.logoUrl} className="w-full h-full object-contain" /> : (
-                       <>
-                         <Upload size={24} className="text-zinc-600 group-hover:text-[#d4af37] mb-3" />
-                         <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Subir Logo</span>
-                       </>
-                     )}
+            <motion.div key="s3" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="space-y-10">
+              <h1 className="text-5xl font-black uppercase tracking-tighter leading-[0.9]">A <span style={{ color: draft.brandColor }} className="italic">Vibe.</span></h1>
+              
+              <div className="space-y-8">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600 ml-1">Paleta de Destaque</label>
+                  <div className="grid grid-cols-6 gap-3">
+                    {["#d4af37", "#3b82f6", "#ef4444", "#10b981", "#a855f7"].map(c => (
+                      <button key={c} onClick={() => handleUpdate("brandColor", c)} className={`aspect-square rounded-full transition-all ${draft.brandColor === c ? 'ring-2 ring-white ring-offset-4 ring-offset-black' : 'opacity-40 hover:opacity-100'}`} style={{ backgroundColor: c }} />
+                    ))}
+                    <div className="relative aspect-square rounded-full border border-white/20 overflow-hidden">
+                      <input type="color" value={draft.brandColor} onChange={(e) => handleUpdate("brandColor", e.target.value)} className="absolute inset-[-10px] w-[150%] h-[150%] cursor-pointer" />
+                    </div>
                   </div>
-                  <button onClick={() => router.push('/logo-helper')} className="text-[9px] font-black uppercase tracking-widest text-[#d4af37] flex items-center gap-2 justify-center hover:text-[#fcd34d] transition-colors">
-                     <HelpCircle size={12} /> Não tenho logo
-                  </button>
                 </div>
 
-                <div className="space-y-3 text-center">
-                  <input type="file" accept="image/*" ref={avatarInputRef} onChange={(e) => handleImage(e, 'avatarUrl')} className="hidden" />
-                  <div onClick={() => avatarInputRef.current?.click()} className="aspect-square rounded-[2rem] bg-zinc-900 border-2 border-dashed border-white/10 flex flex-col items-center justify-center p-6 group hover:border-[#d4af37]/50 transition-all cursor-pointer relative overflow-hidden">
-                     {draft.avatarUrl ? <img src={draft.avatarUrl} className="w-full h-full object-cover" /> : (
-                       <>
-                         <User size={24} className="text-zinc-600 group-hover:text-[#d4af37] mb-3" />
-                         <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Sua Foto</span>
-                       </>
-                     )}
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600 ml-1">Personalidade Tipográfica</label>
+                  <div className="grid grid-cols-1 gap-2">
+                    {["Inter", "Bebas Neue", "Playfair Display"].map(font => (
+                      <button key={font} onClick={() => handleUpdate("titleFont", font)} className={`p-4 rounded-xl border text-left transition-all ${draft.titleFont === font ? 'bg-white/10 border-white/30 shadow-lg' : 'bg-transparent border-white/5 hover:bg-white/5'}`}>
+                        <span className="text-xl font-black uppercase tracking-tight text-white" style={{ fontFamily: font }}>{font}</span>
+                      </button>
+                    ))}
                   </div>
-                  <span className="text-[9px] font-black uppercase tracking-widest text-zinc-700 underline">Opcional</span>
                 </div>
-
               </div>
             </motion.div>
           )}
 
-          {/* ================= PASSO 4: ESTRATÉGIA ================= */}
+          {/* PASSO 4: ESTRATÉGIA FINAL */}
           {step === 4 && (
-            <motion.div key="s4" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-8">
-              <h1 className="text-5xl font-black uppercase tracking-tighter leading-tight">Seu <span style={{ color: draft.brandColor }} className="italic transition-colors">Foco.</span></h1>
+            <motion.div key="s4" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
+              <h1 className="text-5xl font-black uppercase tracking-tighter leading-[0.9]">Seu <span style={{ color: draft.brandColor }} className="italic">Norte.</span></h1>
               
-              {/* Ojetivo Principal */}
-              <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Qual seu objetivo principal?</label>
+              <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   {GOALS.map(g => (
-                    <button 
-                      key={g.id} onClick={() => handleUpdate("goal", g.id)}
-                      className={`p-4 rounded-2xl border text-left transition-all flex flex-col gap-3 ${draft.goal === g.id ? 'bg-white/10 border-[#d4af37]/50' : 'bg-transparent border-white/5 hover:bg-white/5'}`}
-                    >
+                    <button key={g.id} onClick={() => handleUpdate("goal", g.id)} className={`p-4 rounded-2xl border text-left flex flex-col gap-3 transition-all ${draft.goal === g.id ? 'bg-white/10 border-[#d4af37]/50 shadow-xl' : 'bg-transparent border-white/5'}`}>
                       <g.icon size={18} className={draft.goal === g.id ? "text-[#d4af37]" : "text-zinc-600"} />
                       <span className="text-[11px] font-bold uppercase tracking-wider text-white">{g.label}</span>
                     </button>
                   ))}
                 </div>
-              </div>
 
-              {/* Tom de Voz / Persona */}
-              <div className="space-y-3 pt-4">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Tom de Voz</label>
-                <div className="grid grid-cols-1 gap-3">
-                  {PERSONA_TONES.map(t => (
-                    <button 
-                      key={t.id} onClick={() => handleUpdate("persona", t.id)}
-                      className={`w-full p-4 rounded-2xl border text-left transition-all flex items-center gap-4 ${draft.persona === t.id ? 'bg-white/10 border-[#d4af37]/50' : 'bg-transparent border-white/5 hover:bg-white/5'}`}
-                    >
-                      <div className="w-2 h-8 rounded-full" style={{ backgroundColor: t.color }} />
-                      <div>
-                        <span className="block text-sm font-black uppercase tracking-widest text-white">{t.label}</span>
-                        <span className="text-[10px] text-zinc-500 font-bold uppercase">{t.desc}</span>
-                      </div>
-                    </button>
-                  ))}
+                <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-4">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600 block">Tom de Voz da Marca</label>
+                  <div className="flex flex-col gap-2">
+                    {PERSONA_TONES.map(t => (
+                      <button key={t.id} onClick={() => handleUpdate("persona", t.id)} className={`flex items-center gap-4 p-3 rounded-xl transition-all ${draft.persona === t.id ? 'bg-white/5 shadow-inner' : 'opacity-40 hover:opacity-100'}`}>
+                        <div className="w-1.5 h-6 rounded-full" style={{ backgroundColor: t.color }} />
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-white">{t.label}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -211,19 +214,18 @@ export const WizardControls = ({ step, setStep, draft, handleUpdate, onComplete,
         </AnimatePresence>
       </div>
 
-      <footer className="flex items-center justify-between pt-12 shrink-0 border-t border-white/5">
+      <footer className="flex items-center justify-between pt-10 shrink-0 border-t border-white/5">
         <button 
           onClick={() => setStep(s => Math.max(1, s - 1))} 
-          className={`text-zinc-500 uppercase text-[10px] font-black tracking-widest flex items-center gap-2 transition-opacity duration-300 ${step === 1 ? 'opacity-0 pointer-events-none' : 'hover:text-white'}`}
+          className={`text-zinc-600 uppercase text-[10px] font-black tracking-widest flex items-center gap-2 transition-all ${step === 1 ? 'opacity-0 pointer-events-none' : 'hover:text-white'}`}
         >
           <ArrowLeft size={14} /> Voltar
         </button>
         
         <button 
-          // Trava de segurança: só avança do passo 1 se tiver nome E nicho preenchidos
           onClick={() => step < 4 ? setStep(s => s + 1) : onComplete()}
-          disabled={loading || (step === 1 && (!draft.brandName.trim() || !draft.niche)) || (step === 4 && (!draft.goal || !draft.persona))}
-          className="group flex items-center gap-6 bg-white text-black pl-8 pr-2 py-2 rounded-full font-black uppercase text-[10px] tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] disabled:opacity-50 disabled:hover:scale-100"
+          disabled={loading || (step === 1 && (!draft.brandName.trim() || !draft.niche))}
+          className="group flex items-center gap-6 bg-white text-black pl-8 pr-2 py-2 rounded-full font-black uppercase text-[10px] tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_10px_40px_rgba(255,255,255,0.05)] disabled:opacity-50"
         >
           {loading ? "Processando..." : step === 4 ? "Criar Universo" : "Próximo Passo"}
           <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center group-hover:bg-[#d4af37] group-hover:text-black transition-colors">

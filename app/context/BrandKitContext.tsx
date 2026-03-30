@@ -48,6 +48,7 @@ export interface BrandKitState {
 
   // Hook CTA (Slide Final)
   hookEnabled: boolean;
+  hookType?: string;
   hookLayout: string;
   hookTitle: string;
   hookSubtitle: string;

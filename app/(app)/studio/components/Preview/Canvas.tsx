@@ -10,6 +10,20 @@ import { IntersectionScanner } from "./IntersectionScanner";
 import { HookContent } from "./HookContent"; 
 import { SlideWrapper } from "./SlideWrapper"; 
 
+// --- TIPAGENS ---
+export interface ZAxisTransition {
+  slideIndex: number;
+  topPos: number;
+  shape: string;
+  shapeColor?: string;
+  shapeSize?: number;
+  shapeOpacity?: number;
+  blur?: number;
+  url?: string;
+  imgSize?: number;
+  imgOpacity?: number;
+}
+
 // --- HELPERS (mantidos) ---
 const hexToRgba = (hex: string, opacity: number) => {
   if (!hex) return "transparent";
@@ -19,7 +33,7 @@ const hexToRgba = (hex: string, opacity: number) => {
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 };
 
-const ZAxisElement = ({ data }: { data: any }) => {
+const ZAxisElement = ({ data }: { data: ZAxisTransition }) => {
   if (data.shape === "none" && !data.url) return null;
   const xPos = (data.slideIndex + 1) * 320;
 
@@ -27,7 +41,7 @@ const ZAxisElement = ({ data }: { data: any }) => {
     <React.Fragment>
       {data.shape !== "none" && (
         <div className="absolute z-10 pointer-events-none flex items-center justify-center transition-all duration-150" style={{ left: `${xPos}px`, top: `${data.topPos}%`, transform: "translate(-50%, -50%)" }}>
-          <div style={{ width: `${data.shapeSize}px`, height: data.shape === "rectangle" ? `${data.shapeSize * 0.45}px` : `${data.shapeSize}px`, backgroundColor: data.shapeColor, borderRadius: data.shape === "circle" ? "50%" : "16px", opacity: data.shapeOpacity ?? 0.8 }} className="shadow-2xl" />
+          <div style={{ width: `${data.shapeSize}px`, height: data.shape === "rectangle" ? `${(data.shapeSize || 100) * 0.45}px` : `${data.shapeSize}px`, backgroundColor: data.shapeColor, borderRadius: data.shape === "circle" ? "50%" : "16px", opacity: data.shapeOpacity ?? 0.8 }} className="shadow-2xl" />
         </div>
       )}
       {data.url && (
@@ -73,7 +87,7 @@ export const CarouselPreview = forwardRef<HTMLDivElement, any>(
       if (isSimulator) {
         return (
           <div className="flex h-full relative z-20" style={{ width: `${trackWidth}px` }}>
-            {finalSlides.map((item: any, i) => (
+            {finalSlides.map((item: any, i: number) => (
               <div key={item.id} className="w-[320px] h-full flex-shrink-0 relative snap-center">
                  {/* Utiliza os componentes externalizados */}
                  {item.isDynamicHook ? <HookContent brandKit={brandKit} /> : <SlideWrapper item={item} i={i} hoveredSlide={null} totalSlidesCount={finalSlides.length} isSimulator={true} showSafeZones={false} />}
@@ -91,7 +105,7 @@ export const CarouselPreview = forwardRef<HTMLDivElement, any>(
           className="flex h-full relative z-20" 
           style={{ width: `${trackWidth}px` }}
         >
-          {finalSlides.map((item: any, i) => (
+          {finalSlides.map((item: any, i: number) => (
             <Reorder.Item 
               key={item.id} 
               value={item}
@@ -112,7 +126,8 @@ export const CarouselPreview = forwardRef<HTMLDivElement, any>(
             </Reorder.Item>
           ))}
 
-          {transitions.map((trans) => {
+          {/* 👇 CORREÇÃO: Trans tipada com a interface correta */}
+          {transitions.map((trans: ZAxisTransition) => {
             const isEditing = activePanel === "zaxis" && modal?.targetIndex === trans.slideIndex;
             return <ZAxisElement key={`z-${trans.slideIndex}`} data={isEditing ? modal.data : trans} />;
           })}

@@ -4,14 +4,18 @@ import { useBrandKit } from "@/app/context/BrandKitContext";
 import React from "react";
 
 export default function BrandSetupPage() {
+  // 1. Puxa o estado global e a função de atualização única
+  const { brandKit, updateBrandKit } = useBrandKit();
+
+  // 2. Extrai os valores para não quebrar a sua UI atual
   const {
-    brandColor, setBrandColor,
-    textColor, setTextColor,
-    bgType, setBgType,
-    bgColor1, setBgColor1,
-    bgColor2, setBgColor2,
-    bgAngle, setBgAngle,
-  } = useBrandKit();
+    brandColor,
+    textColor,
+    bgType,
+    bgColor1,
+    bgColor2,
+    bgAngle,
+  } = brandKit;
 
   // Helper para o preview visual do fundo
   const previewBackground = bgType === "solid" 
@@ -36,7 +40,8 @@ export default function BrandSetupPage() {
             <input 
               type="color" 
               value={brandColor} 
-              onChange={(e) => setBrandColor(e.target.value)}
+              // 👇 ATUALIZADO: Usando o updateBrandKit
+              onChange={(e) => updateBrandKit({ brandColor: e.target.value })}
               className="w-10 h-10 rounded-lg border-0 bg-transparent cursor-pointer" 
             />
             <div className="flex flex-col">
@@ -53,7 +58,8 @@ export default function BrandSetupPage() {
             <input 
               type="color" 
               value={textColor} 
-              onChange={(e) => setTextColor(e.target.value)}
+              // 👇 ATUALIZADO
+              onChange={(e) => updateBrandKit({ textColor: e.target.value })}
               className="w-10 h-10 rounded-lg border-0 bg-transparent cursor-pointer" 
             />
             <div className="flex flex-col">
@@ -75,13 +81,15 @@ export default function BrandSetupPage() {
             {/* Seletor de Tipo */}
             <div className="flex bg-zinc-950 p-1.5 rounded-xl border border-zinc-800">
               <button 
-                onClick={() => setBgType("solid")} 
+                // 👇 ATUALIZADO
+                onClick={() => updateBrandKit({ bgType: "solid" })} 
                 className={`flex-1 py-3 text-xs font-bold rounded-lg transition-all ${bgType === "solid" ? "bg-zinc-800 text-[#d4af37] shadow-lg" : "text-zinc-500 hover:text-zinc-300"}`}
               >
                 SÓLIDO
               </button>
               <button 
-                onClick={() => setBgType("gradient")} 
+                // 👇 ATUALIZADO
+                onClick={() => updateBrandKit({ bgType: "gradient" })} 
                 className={`flex-1 py-3 text-xs font-bold rounded-lg transition-all ${bgType === "gradient" ? "bg-zinc-800 text-[#d4af37] shadow-lg" : "text-zinc-500 hover:text-zinc-300"}`}
               >
                 GRADIENTE
@@ -93,7 +101,13 @@ export default function BrandSetupPage() {
               <div className="space-y-2">
                 <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-tighter">Cor Principal</label>
                 <div className="flex items-center gap-3 bg-zinc-950 border border-zinc-800 p-2.5 rounded-xl">
-                  <input type="color" value={bgColor1} onChange={(e) => setBgColor1(e.target.value)} className="w-8 h-8 rounded border-0 bg-transparent cursor-pointer" />
+                  <input 
+                    type="color" 
+                    value={bgColor1} 
+                    // 👇 ATUALIZADO
+                    onChange={(e) => updateBrandKit({ bgColor1: e.target.value })} 
+                    className="w-8 h-8 rounded border-0 bg-transparent cursor-pointer" 
+                  />
                   <span className="text-[10px] font-mono text-zinc-400 uppercase">{bgColor1}</span>
                 </div>
               </div>
@@ -102,7 +116,13 @@ export default function BrandSetupPage() {
                 <div className="space-y-2 animate-in fade-in duration-500">
                   <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-tighter">Cor Secundária</label>
                   <div className="flex items-center gap-3 bg-zinc-950 border border-zinc-800 p-2.5 rounded-xl">
-                    <input type="color" value={bgColor2} onChange={(e) => setBgColor2(e.target.value)} className="w-8 h-8 rounded border-0 bg-transparent cursor-pointer" />
+                    <input 
+                      type="color" 
+                      value={bgColor2} 
+                      // 👇 ATUALIZADO
+                      onChange={(e) => updateBrandKit({ bgColor2: e.target.value })} 
+                      className="w-8 h-8 rounded border-0 bg-transparent cursor-pointer" 
+                    />
                     <span className="text-[10px] font-mono text-zinc-400 uppercase">{bgColor2}</span>
                   </div>
                 </div>
@@ -119,7 +139,8 @@ export default function BrandSetupPage() {
                 <input 
                   type="range" min="0" max="360" 
                   value={bgAngle} 
-                  onChange={(e) => setBgAngle(Number(e.target.value))} 
+                  // 👇 ATUALIZADO
+                  onChange={(e) => updateBrandKit({ bgAngle: Number(e.target.value) })} 
                   className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-[#d4af37]" 
                 />
               </div>

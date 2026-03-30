@@ -1,5 +1,15 @@
 import { useState, useEffect } from 'react';
-import { CarouselProject } from '../types/project';
+
+// 1. TIPAGEM DECLARADA AQUI (Resolve o erro de importação)
+export interface CarouselProject {
+  id: string;
+  title?: string;
+  updatedAt?: string;
+  thumbnail?: string;
+  // O [key: string]: any permite que o objeto guarde os slides e o tema 
+  // sem o TypeScript reclamar das propriedades extras
+  [key: string]: any; 
+}
 
 export function useProjects() {
   const [projects, setProjects] = useState<CarouselProject[]>([]);

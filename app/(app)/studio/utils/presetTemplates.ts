@@ -13,6 +13,8 @@ export interface StudioTemplate {
     bgColor2?: string;
     bgAngle?: number;
     fontPair: "modern" | "elegant" | "impact" | "creative";
+    titleFont?: string;
+    bodyFont?: string;
 
     // Hook principal do template
     hookLayout:
@@ -47,6 +49,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "tech-trends-2026",
     name: "Tendências Tech 2026",
     description: "Carrossel com cara de inovação, bastante imagem e hook voltado para seguir o perfil.",
+    category: "Tecnologia",
     theme: {
       brandColor: "#00BCD4",
       textColor: "#FFFFFF",
@@ -83,6 +86,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "design-system-playbook",
     name: "Design System Playbook",
     description: "Preset visual para design, produto e times que querem escalar consistência.",
+    category: "Design & UX",
     theme: {
       brandColor: "#8B5CF6",
       textColor: "#FFFFFF",
@@ -115,6 +119,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "creator-launch-formula",
     name: "Lançamento para Creators",
     description: "Preset para infoprodutos, creator economy e carrosséis que conduzem para ação.",
+    category: "Marketing",
     theme: {
       brandColor: "#F97316",
       textColor: "#FFFFFF",
@@ -151,6 +156,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "healthy-routine-guide",
     name: "Rotina Saudável",
     description: "Preset leve, visual e motivacional com bastante imagem e hook de salvar.",
+    category: "Lifestyle",
     theme: {
       brandColor: "#22C55E",
       textColor: "#1C1917",
@@ -185,6 +191,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "financial-roadmap",
     name: "Roadmap Financeiro",
     description: "Template educacional para finanças com visual mais premium e hook de perfil.",
+    category: "Finanças",
     theme: {
       brandColor: "#2563EB",
       textColor: "#FFFFFF",
@@ -221,6 +228,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "remote-work-playbook",
     name: "Trabalho Remoto com Estrutura",
     description: "Preset com cara de produtividade, setup e rotina profissional.",
+    category: "Carreira",
     theme: {
       brandColor: "#A855F7",
       textColor: "#FFFFFF",
@@ -255,6 +263,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "personal-brand-builder",
     name: "Marca Pessoal Forte",
     description: "Preset para autoridade, narrativa e posicionamento profissional.",
+    category: "Branding",
     theme: {
       brandColor: "#EC4899",
       textColor: "#FFFFFF",
@@ -291,6 +300,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "product-strategy-framework",
     name: "Estratégia de Produto",
     description: "Preset mais executivo para discovery, visão, priorização e valor de negócio.",
+    category: "Produto",
     theme: {
       brandColor: "#14B8A6",
       textColor: "#FFFFFF",
@@ -325,6 +335,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "digital-nomad-guide",
     name: "Vida Nômade Digital",
     description: "Preset visual para liberdade geográfica, trabalho remoto e lifestyle.",
+    category: "Lifestyle",
     theme: {
       brandColor: "#06B6D4",
       textColor: "#FFFFFF",
@@ -360,6 +371,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "storytelling-for-content",
     name: "Storytelling para Conteúdo",
     description: "Preset emocional e visual para retenção, narrativa e conexão.",
+    category: "Conteúdo",
     theme: {
       brandColor: "#F43F5E",
       textColor: "#FFFFFF",
@@ -391,6 +403,7 @@ export const PRESET_TEMPLATES: StudioTemplate[] = [
     id: "sales-copy-framework",
     name: "Copy para Vendas",
     description: "Preset mais agressivo para oferta, percepção de valor e CTA.",
+    category: "Vendas",
     theme: {
       brandColor: "#EF4444",
       textColor: "#FFFFFF",

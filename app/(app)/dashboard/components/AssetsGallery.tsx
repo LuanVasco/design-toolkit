@@ -2,8 +2,7 @@
 
 import React from "react";
 import { Download, FileType, CheckCircle } from "lucide-react";
-import { LogoRenderer } from "@/app/components/logo-engine/LogoRenderer";
-import { LogoConfig } from "../../logo-helper/engine/combinator";
+import { LogoConfig, LogoRenderer } from "@/app/components/logo-engine/LogoRenderer";
 
 interface AssetsGalleryProps {
   brandName: string;

@@ -245,8 +245,8 @@ export default function StudioPage() {
                 activePanel={activePanel} 
                 modal={modal}
                 onEditSlide={handleEditSlide}
-                onAddSlide={(idx) => updateSlideCount(1)}
-                onDeleteSlide={(idx) => updateSlideCount(-1)}
+                onAddSlide={(idx: number) => updateSlideCount(1)}
+                onDeleteSlide={(idx: number) => updateSlideCount(-1)}
                 onOpenTransition={handleOpenZAxis}
                 onReorderSlides={reorderSlides}
               />

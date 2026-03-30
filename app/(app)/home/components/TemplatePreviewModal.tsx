@@ -23,8 +23,8 @@ export const TemplatePreviewModal = ({ template, isOpen, onClose, onConfirm }: P
   const presetBgColor = template.theme?.bgColor1 || "#050505";
   const presetBrandColor = template.theme?.brandColor || "#d4af37";
   const presetTextColor = template.theme?.textColor || "#ffffff";
-  const presetTitleFont = template.theme?.titleFont || "Inter";
-  const presetBodyFont = template.theme?.bodyFont || "Inter";
+  const presetTitleFont = (template.theme as any)?.titleFont || "Inter";
+   const presetBodyFont = (template.theme as any)?.bodyFont || "Inter";
 
   // Navegação Panorâmica
   const scroll = (direction: "left" | "right") => {

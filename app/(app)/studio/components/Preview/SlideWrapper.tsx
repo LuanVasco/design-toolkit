@@ -17,28 +17,33 @@ interface SlideWrapperProps {
   onDeleteSlide?: (index: number) => void;
   showSafeZones: boolean;
   isSimulator: boolean;
+  isReadOnly?: boolean; // Já estava na interface, agora vamos usar!
 }
 
 export const SlideWrapper = ({ 
   item, i, hoveredSlide, setHoveredSlide, totalSlidesCount, 
   onEditSlide, onAddSlide, onOpenTransition, onDeleteSlide, 
-  showSafeZones, isSimulator 
+  showSafeZones, isSimulator, 
+  isReadOnly = false // 👇 1. Pegamos a prop com valor default
 }: SlideWrapperProps) => {
   
   const isLastSlide = i === totalSlidesCount - 1;
 
+  // 🧠 Helper para simplificar as condições: só mostra UI se não for simulador E não for leitura
+  const showEditorUI = !isSimulator && !isReadOnly;
+
   return (
     <div 
-      onMouseEnter={() => setHoveredSlide?.(i)} 
-      onMouseLeave={() => setHoveredSlide?.(null)}
-      className="w-full h-full relative transition-colors duration-300"
+      onMouseEnter={() => !isReadOnly && setHoveredSlide?.(i)} 
+      onMouseLeave={() => !isReadOnly && setHoveredSlide?.(null)}
+      className={`w-full h-full relative transition-colors duration-300 ${isReadOnly ? 'cursor-default' : ''}`}
     >
       {/* 1. O COMPONENTE CENTRAL DE CONTEÚDO (SLIDEUNIT) */}
       <SlideUnit index={i} slide={item} totalSlides={totalSlidesCount} />
 
-      {/* 2. OVERLAYS DO EDITOR (Botão lateral de adição) */}
+      {/* 2. OVERLAYS DO EDITOR (Botão lateral de adição) - 👇 Adicionado !isReadOnly */}
       <AnimatePresence>
-        {!isSimulator && hoveredSlide === i && !isLastSlide && (
+        {showEditorUI && hoveredSlide === i && !isLastSlide && (
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
@@ -54,20 +59,21 @@ export const SlideWrapper = ({
         )}
       </AnimatePresence>
 
-      {/* 3. ZONAS SEGURAS (BLUEPRINT) */}
-      {!isSimulator && showSafeZones && (
+      {/* 3. ZONAS SEGURAS (BLUEPRINT) - 👇 Adicionado !isReadOnly */}
+      {showEditorUI && showSafeZones && (
         <div className="absolute inset-0 pointer-events-none z-40 overflow-hidden opacity-20">
           <div className="absolute top-0 w-full h-16 border-b border-red-500 border-dashed" />
           <div className="absolute bottom-0 w-full h-24 border-t border-red-500 border-dashed" />
         </div>
       )}
 
-      {/* 4. MENU FLUTUANTE DE CONTEXTO (Editar, Z-Axis, Deletar) */}
+      {/* 4. MENU FLUTUANTE DE CONTEXTO - 👇 Adicionado showEditorUI */}
       <AnimatePresence>
-        {!isSimulator && hoveredSlide === i && (
+        {showEditorUI && hoveredSlide === i && (
           <motion.div 
             initial={{ opacity: 0, y: 10 }} 
             animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: 10 }}
             className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-zinc-950/90 border border-white/10 p-1.5 rounded-full shadow-2xl"
           >
             <button onClick={() => onEditSlide?.(i)} className="p-2 text-white hover:bg-zinc-800 rounded-full transition-colors"><Edit2 size={14}/></button>

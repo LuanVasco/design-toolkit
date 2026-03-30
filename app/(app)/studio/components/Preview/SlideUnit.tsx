@@ -1,4 +1,3 @@
-// src/app/studio/components/SlideUnit.tsx
 "use client";
 
 import React from "react";
@@ -29,7 +28,7 @@ export const SlideUnit = ({ index, slide, totalSlides }: SlideUnitProps) => {
     const titleLen = slide.title?.length || 0;
     const descLen = slide.desc?.length || 0;
 
-    // Lógica Escalonável para Títulos (Garante que nunca quebre a tela)
+    // Lógica Escalonável para Títulos
     let tSize = "28px"; 
     let tLead = "1.05";
     if (titleLen > 45) { tSize = "21px"; tLead = "1.15"; }
@@ -56,15 +55,16 @@ export const SlideUnit = ({ index, slide, totalSlides }: SlideUnitProps) => {
     else if (pair === 'impact') typography = { '--font-title': '"Montserrat", sans-serif', '--font-body': '"Open Sans", sans-serif' };
     else if (pair === 'creative') typography = { '--font-title': '"Space Grotesk", sans-serif', '--font-body': '"Roboto", sans-serif' };
 
+    // 👇 A CORREÇÃO DE OURO: Convertendo para unknown antes de CSSProperties
     return { 
       ...getSlideBg(), 
       ...typography,
       ...getDynamicTypographyVariables(), 
       '--brand-color': brandKit.brandColor,
       '--text-color': brandKit.textColor,
-      '--font-scale': brandKit.fontScale || 1, // 👈 INJETAMOS A ESCALA DO USUÁRIO AQUI
+      '--font-scale': brandKit.fontScale || 1,
       color: brandKit.textColor 
-    } as React.CSSProperties;
+    } as unknown as React.CSSProperties; 
   };
 
   const layoutDef = LayoutRegistry[slide.layout] || LayoutRegistry["CLASSIC"];
@@ -74,8 +74,7 @@ export const SlideUnit = ({ index, slide, totalSlides }: SlideUnitProps) => {
       className={`carousel-slide-unit w-full h-full relative flex flex-col justify-center z-20 transition-all duration-500 overflow-hidden ${layoutDef?.paddingClass || 'p-8'}`}
       style={getGlobalStyles()} 
     >
-      {/* 🚀 O HACK DE PRODUTIVIDADE COMBINADO COM A ESCALA */}
-      {/* O calc() multiplica o tamanho seguro pela escala escolhida pelo usuário */}
+      {/* 🚀 HACK DE ESCALA VIA CSS VARIABLES */}
       <style>{`
         .carousel-slide-unit h1,
         .carousel-slide-unit h2,

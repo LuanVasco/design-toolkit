@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, User } from "lucide-react";
+import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, User, UserPlus } from "lucide-react";
 import { getProxyUrl } from "../../utils/studioHelpers";
 import { SlideUnit } from "./SlideUnit"; 
 

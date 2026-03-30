@@ -19,7 +19,7 @@ export const HookContent = ({ brandKit }: HookContentProps) => {
     <div className="w-full h-full relative group">
       
       {/* A MÁGICA: O plugin renderiza aqui */}
-      {layoutDef.render({ brandKit })}
+      {(layoutDef.render({ brandKit }) as React.ReactElement)}
 
       {/* Overlay de Proteção Global (Aplica-se a qualquer hook) */}
       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center backdrop-blur-sm z-50 pointer-events-none">

@@ -2,71 +2,87 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Check, Sparkles, Target, Palette, Zap } from "lucide-react";
+import { 
+  ArrowRight, Sparkles, Target, Palette, Zap, 
+  Layout, Maximize, CheckCircle2, ChevronRight 
+} from "lucide-react";
 
-// Mock de dados baseado no benchmark do Pixella
+// --- DADOS REFINADOS (Benchmark de Agências) ---
 const STEPS_DATA = {
   niches: [
-    { id: "tech", label: "Tecnologia & SaaS", icon: <Zap size={18} /> },
-    { id: "health", label: "Saúde & Bem-estar", icon: <Target size={18} /> },
-    { id: "finance", label: "Finanças & Consultoria", icon: <Sparkles size={18} /> },
-    { id: "creative", label: "Artes & Criatividade", icon: <Palette size={18} /> },
+    { id: "tech", label: "Tecnologia & SaaS", icon: <Zap size={20} />, desc: "Inovação e Escala" },
+    { id: "finance", label: "Finanças & Consultoria", icon: <Sparkles size={20} />, desc: "Confiança e Seriedade" },
+    { id: "marketing", label: "Marketing & Vendas", icon: <Target size={20} />, desc: "Crescimento e Performance" },
+    { id: "health", label: "Saúde & Bem-estar", icon: <Palette size={20} />, desc: "Equilíbrio e Cuidado" },
   ],
-  styles: [
-    { id: "minimal", label: "Minimalista", desc: "Menos é mais. Foco no essencial.", img: "bg-zinc-800" },
-    { id: "bold", label: "Bold & Loud", desc: "Impacto visual e peso tipográfico.", img: "bg-[#d4af37]/20" },
-    { id: "elegant", label: "Elegante", desc: "Sofisticação, serifas e luxo.", img: "bg-zinc-900" },
-    { id: "abstract", label: "Abstrato", desc: "Formas orgânicas e modernas.", img: "bg-white/5" },
+  // Aqui unimos Estilo com Composição (O que você queria melhorar)
+  compositions: [
+    { id: "stacked", label: "Arquitetura Vertical", icon: <Layout size={20} />, desc: "Símbolo centralizado sobre o nome." },
+    { id: "inline", label: "Arquitetura Horizontal", icon: <Maximize size={20} />, desc: "Símbolo ao lado, foco em leitura." },
   ],
-  colors: [
-    { id: "gold", hex: "#d4af37", label: "Ouro" },
-    { id: "blue", hex: "#2563eb", label: "Royal Blue" },
-    { id: "white", hex: "#ffffff", label: "Pure White" },
-    { id: "black", hex: "#000000", label: "Deep Black" },
+  palettes: [
+    { id: "p1", name: "Midnight Gold", colors: ["#020202", "#d4af37"], label: "Luxo" },
+    { id: "p2", name: "Cyber Blue", colors: ["#020617", "#3b82f6"], label: "Tech" },
+    { id: "p3", name: "Pure Minimal", colors: ["#000000", "#ffffff"], label: "Clean" },
+    { id: "p4", name: "Crimson Noir", colors: ["#1a0505", "#ef4444"], label: "Impacto" },
   ]
 };
 
 export default function OnboardingFlow({ onComplete }: { onComplete: (data: any) => void }) {
   const [step, setStep] = useState(1);
-  const [selections, setSelections] = useState({ niche: "", style: "", color: "" });
+  const [selections, setSelections] = useState({ 
+    niche: "", 
+    composition: "stacked", 
+    color: "#d4af37",
+    paletteId: "p1"
+  });
 
   const nextStep = () => setStep(prev => prev + 1);
+  const prevStep = () => setStep(prev => Math.max(1, prev - 1));
 
   const containerVariants = {
-    initial: { opacity: 0, x: 20 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -20 }
+    initial: { opacity: 0, y: 15 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -15 }
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-12 px-6">
+    <div className="w-full max-w-3xl mx-auto py-12 px-4">
       
-      {/* PROGRESS BAR (Estilo Apple) */}
-      <div className="flex justify-center gap-3 mb-16">
-        {[1, 2, 3].map(i => (
-          <div key={i} className={`h-1 rounded-full transition-all duration-500 ${step >= i ? "w-12 bg-[#d4af37]" : "w-6 bg-zinc-800"}`} />
-        ))}
+      {/* HEADER DE PROGRESSO */}
+      <div className="flex items-center justify-between mb-16 px-2">
+        <div className="flex gap-2">
+          {[1, 2, 3].map(i => (
+            <div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${step >= i ? "w-10 bg-[#d4af37]" : "w-3 bg-zinc-800"}`} />
+          ))}
+        </div>
+        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">
+          Passo 0{step} <span className="text-zinc-800">/</span> 03
+        </span>
       </div>
 
       <AnimatePresence mode="wait">
         
-        {/* STEP 1: NICHE */}
+        {/* STEP 1: NICHE (A BASE) */}
         {step === 1 && (
           <motion.div key="s1" {...containerVariants} className="space-y-10">
-            <div className="text-center space-y-2">
-              <h2 className="text-4xl font-black italic uppercase tracking-tighter">Qual o seu mercado?</h2>
-              <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">O Nicho define a inteligência por trás da marca</p>
+            <div className="space-y-3">
+              <h2 className="text-5xl font-black italic uppercase tracking-tighter leading-[0.9]">Seu <span className="text-[#d4af37]">Nicho.</span></h2>
+              <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">A inteligência se adapta ao seu mercado</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {STEPS_DATA.niches.map(n => (
                 <button 
                   key={n.id}
                   onClick={() => { setSelections({...selections, niche: n.label}); nextStep(); }}
-                  className="flex items-center justify-between p-8 bg-zinc-900/30 border border-white/5 rounded-[2rem] hover:border-[#d4af37]/50 hover:bg-zinc-900/50 transition-all group"
+                  className="flex items-start justify-between p-8 bg-zinc-900/20 border border-white/5 rounded-[2.5rem] hover:border-[#d4af37]/40 hover:bg-zinc-900/40 transition-all group text-left"
                 >
-                  <span className="text-lg font-bold tracking-tight">{n.label}</span>
-                  <div className="p-3 rounded-xl bg-white/5 group-hover:bg-[#d4af37] group-hover:text-black transition-all">
+                  <div className="space-y-1">
+                    <span className="block text-lg font-bold tracking-tight text-white">{n.label}</span>
+                    <span className="block text-[10px] font-bold text-zinc-600 uppercase tracking-widest">{n.desc}</span>
+                  </div>
+                  <div className="p-3 rounded-2xl bg-white/5 group-hover:bg-[#d4af37] group-hover:text-black transition-all">
                     {n.icon}
                   </div>
                 </button>
@@ -75,55 +91,61 @@ export default function OnboardingFlow({ onComplete }: { onComplete: (data: any)
           </motion.div>
         )}
 
-        {/* STEP 2: STYLE (O "Select styles you like") */}
+        {/* STEP 2: COMPOSITION (O DIFERENCIAL) */}
         {step === 2 && (
           <motion.div key="s2" {...containerVariants} className="space-y-10">
-            <div className="text-center space-y-2">
-              <h2 className="text-4xl font-black italic uppercase tracking-tighter">Escolha um Estilo</h2>
-              <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">A estética dita a tipografia do seu hub</p>
+            <div className="space-y-3">
+              <h2 className="text-5xl font-black italic uppercase tracking-tighter leading-[0.9]">Sua <span className="text-[#d4af37]">Estrutura.</span></h2>
+              <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Como sua marca deve se posicionar?</p>
             </div>
             
-            <div className="grid grid-cols-2 gap-6">
-              {STEPS_DATA.styles.map(s => (
-                <div 
-                  key={s.id}
-                  onClick={() => { setSelections({...selections, style: s.id}); nextStep(); }}
-                  className="group cursor-pointer space-y-4"
-                >
-                  <div className={`aspect-[4/3] rounded-[2.5rem] ${s.img} border border-white/5 group-hover:border-[#d4af37] transition-all flex items-center justify-center p-8 relative overflow-hidden`}>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <span className="relative z-10 text-[10px] font-black uppercase tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-opacity">Preview Style</span>
-                  </div>
-                  <div className="px-2">
-                    <h3 className="text-sm font-black uppercase tracking-tight">{s.label}</h3>
-                    <p className="text-[10px] text-zinc-600 font-bold uppercase">{s.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* STEP 3: COLOR */}
-        {step === 3 && (
-          <motion.div key="s3" {...containerVariants} className="space-y-10 text-center">
-            <div className="space-y-2">
-              <h2 className="text-4xl font-black italic uppercase tracking-tighter">Cores da Identidade</h2>
-              <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">A cor que comandará o seu Dashboard</p>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-              {STEPS_DATA.colors.map(c => (
+            <div className="grid grid-cols-1 gap-4">
+              {STEPS_DATA.compositions.map(c => (
                 <button 
                   key={c.id}
-                  onClick={() => onComplete({...selections, color: c.hex})}
-                  className="flex flex-col items-center gap-4 p-6 bg-zinc-900/20 border border-white/5 rounded-3xl hover:bg-white/5 transition-all group"
+                  onClick={() => { setSelections({...selections, composition: c.id}); nextStep(); }}
+                  className={`flex items-center gap-6 p-8 rounded-[2.5rem] border transition-all text-left group ${selections.composition === c.id ? "bg-white/5 border-[#d4af37]/50" : "bg-zinc-900/20 border-white/5 hover:border-white/10"}`}
                 >
-                  <div className="w-16 h-16 rounded-2xl shadow-2xl group-hover:scale-110 transition-transform" style={{ backgroundColor: c.hex }} />
-                  <span className="text-[10px] font-black uppercase tracking-widest">{c.label}</span>
+                  <div className={`p-5 rounded-3xl transition-all ${selections.composition === c.id ? "bg-[#d4af37] text-black shadow-[0_0_30px_rgba(212,175,55,0.2)]" : "bg-white/5 text-zinc-500"}`}>
+                    {c.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white tracking-tight">{c.label}</h3>
+                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">{c.desc}</p>
+                  </div>
+                  <ChevronRight size={20} className="ml-auto text-zinc-800 group-hover:text-[#d4af37] transition-colors" />
                 </button>
               ))}
             </div>
+            <button onClick={prevStep} className="text-[10px] font-black uppercase tracking-widest text-zinc-600 hover:text-white transition-colors">Voltar</button>
+          </motion.div>
+        )}
+
+        {/* STEP 3: COLOR (O TOQUE FINAL) */}
+        {step === 3 && (
+          <motion.div key="s3" {...containerVariants} className="space-y-10">
+            <div className="space-y-3">
+              <h2 className="text-5xl font-black italic uppercase tracking-tighter leading-[0.9]">Sua <span className="text-[#d4af37]">Cor.</span></h2>
+              <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">A paleta que comandará seu ecossistema</p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {STEPS_DATA.palettes.map(p => (
+                <button 
+                  key={p.id}
+                  onClick={() => onComplete({...selections, color: p.colors[1], paletteId: p.id})}
+                  className="group flex flex-col p-6 bg-zinc-900/20 border border-white/5 rounded-[2rem] hover:bg-white/5 transition-all text-left"
+                >
+                  <div className="flex gap-2 mb-6">
+                    <div className="w-12 h-12 rounded-2xl shadow-2xl transition-transform group-hover:scale-110" style={{ backgroundColor: p.colors[1] }} />
+                    <div className="w-12 h-12 rounded-2xl border border-white/5" style={{ backgroundColor: p.colors[0] }} />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 group-hover:text-[#d4af37] transition-colors">{p.name}</span>
+                  <span className="text-[9px] font-bold text-zinc-700 uppercase">{p.label} Style</span>
+                </button>
+              ))}
+            </div>
+            <button onClick={prevStep} className="text-[10px] font-black uppercase tracking-widest text-zinc-600 hover:text-white transition-colors">Voltar</button>
           </motion.div>
         )}
 

@@ -4,7 +4,8 @@ import React from "react";
 import { useBrandKit } from "@/app/context/BrandKitContext";
 
 export default function WidgetsFactoryPage() {
-  const brandKit = useBrandKit();
+  // 👇 Desestruturação correta do nosso motor
+  const { brandKit, updateBrandKit } = useBrandKit();
 
   const positionOptions = [
     { value: "top-left", label: "Topo Esquerda" },
@@ -48,7 +49,12 @@ export default function WidgetsFactoryPage() {
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" checked={brandKit.authorEnabled} onChange={(e) => brandKit.setAuthorEnabled(e.target.checked)} />
+              <input 
+                type="checkbox" 
+                className="sr-only peer" 
+                checked={brandKit.authorEnabled} 
+                onChange={(e) => updateBrandKit({ authorEnabled: e.target.checked })} 
+              />
               <div className="w-11 h-6 bg-zinc-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-[#d4af37] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
             </label>
           </div>
@@ -57,19 +63,49 @@ export default function WidgetsFactoryPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-4">
-                  <div><label className="block text-[10px] font-bold text-zinc-500 uppercase mb-2">Nome</label><input type="text" value={brandKit.authorName} onChange={(e) => brandKit.setAuthorName(e.target.value)} className="dark-input w-full p-3 rounded-xl text-sm font-bold" /></div>
-                  <div><label className="block text-[10px] font-bold text-zinc-500 uppercase mb-2">Cargo</label><input type="text" value={brandKit.authorRole} onChange={(e) => brandKit.setAuthorRole(e.target.value)} className="dark-input w-full p-3 rounded-xl text-sm" /></div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-zinc-500 uppercase mb-2">Nome</label>
+                    <input 
+                      type="text" 
+                      value={brandKit.authorName} 
+                      onChange={(e) => updateBrandKit({ authorName: e.target.value })} 
+                      className="dark-input w-full p-3 rounded-xl text-sm font-bold" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-zinc-500 uppercase mb-2">Cargo</label>
+                    <input 
+                      type="text" 
+                      value={brandKit.authorRole} 
+                      onChange={(e) => updateBrandKit({ authorRole: e.target.value })} 
+                      className="dark-input w-full p-3 rounded-xl text-sm" 
+                    />
+                  </div>
                 </div>
                 <div className="space-y-4">
-                  <div><label className="block text-[10px] font-bold text-zinc-500 uppercase mb-2">Foto (URL)</label><input type="url" value={brandKit.authorAvatar} onChange={(e) => brandKit.setAuthorAvatar(e.target.value)} className="dark-input w-full p-3 rounded-xl text-xs" /></div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-zinc-500 uppercase mb-2">Foto (URL)</label>
+                    <input 
+                      type="url" 
+                      value={brandKit.authorAvatar} 
+                      onChange={(e) => updateBrandKit({ authorAvatar: e.target.value })} 
+                      className="dark-input w-full p-3 rounded-xl text-xs" 
+                    />
+                  </div>
                   <div>
                     <label className="block text-[10px] font-bold text-zinc-500 uppercase mb-2">Posição</label>
-                    <select value={brandKit.authorPos} onChange={(e) => brandKit.setAuthorPos(e.target.value)} className="dark-input w-full p-3 rounded-xl text-sm font-semibold">
+                    <select 
+                      value={brandKit.authorPos} 
+                      onChange={(e) => updateBrandKit({ authorPos: e.target.value })} 
+                      className="dark-input w-full p-3 rounded-xl text-sm font-semibold"
+                    >
                       {positionOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                     </select>
                   </div>
                 </div>
               </div>
+              
+              {/* Mini Preview Dot */}
               <div className="bg-zinc-950 rounded-2xl p-4 border border-zinc-800 relative h-32 lg:h-full flex items-center justify-center">
                 <div className="w-full h-full border border-zinc-800/30 rounded relative bg-zinc-900/20">
                   <div className={`absolute w-3 h-3 rounded-full bg-[#d4af37] ${getDotPos(brandKit.authorPos)} animate-pulse`}></div>
@@ -85,11 +121,25 @@ export default function WidgetsFactoryPage() {
           <section className="glass-panel p-6 rounded-3xl flex flex-col">
             <div className="flex justify-between items-center mb-6">
               <label className="text-xs font-bold text-zinc-300 uppercase tracking-widest">@ Handle</label>
-              <input type="checkbox" checked={brandKit.handleEnabled} onChange={(e) => brandKit.setHandleEnabled(e.target.checked)} className="w-4 h-4 accent-[#d4af37]" />
+              <input 
+                type="checkbox" 
+                checked={brandKit.handleEnabled} 
+                onChange={(e) => updateBrandKit({ handleEnabled: e.target.checked })} 
+                className="w-4 h-4 accent-[#d4af37]" 
+              />
             </div>
             <div className={`space-y-4 mt-auto ${brandKit.handleEnabled ? 'opacity-100' : 'opacity-20 pointer-events-none'}`}>
-              <input type="text" value={brandKit.handle} onChange={(e) => brandKit.setHandle(e.target.value)} className="dark-input w-full p-3 rounded-xl text-xs font-mono" />
-              <select value={brandKit.handlePos} onChange={(e) => brandKit.setHandlePos(e.target.value)} className="dark-input w-full p-3 rounded-xl text-xs">
+              <input 
+                type="text" 
+                value={brandKit.handle} 
+                onChange={(e) => updateBrandKit({ handle: e.target.value })} 
+                className="dark-input w-full p-3 rounded-xl text-xs font-mono" 
+              />
+              <select 
+                value={brandKit.handlePos} 
+                onChange={(e) => updateBrandKit({ handlePos: e.target.value })} 
+                className="dark-input w-full p-3 rounded-xl text-xs"
+              >
                 {positionOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
               </select>
             </div>
@@ -99,44 +149,56 @@ export default function WidgetsFactoryPage() {
           <section className="glass-panel p-6 rounded-3xl flex flex-col">
             <label className="text-xs font-bold text-zinc-300 uppercase tracking-widest mb-6 block">🔢 Paginação</label>
             <div className="space-y-4 mt-auto">
-              <select value={brandKit.paginationStyle} onChange={(e) => brandKit.setPaginationStyle(e.target.value as any)} className="dark-input w-full p-3 rounded-xl text-xs font-bold">
+              <select 
+                value={brandKit.paginationStyle} 
+                onChange={(e) => updateBrandKit({ paginationStyle: e.target.value as any })} 
+                className="dark-input w-full p-3 rounded-xl text-xs font-bold"
+              >
                 <option value="numbers">Números</option>
                 <option value="dots">Pontos</option>
                 <option value="progress">Barra</option>
                 <option value="none">Ocultar</option>
               </select>
-              <select value={brandKit.paginationPos} onChange={(e) => brandKit.setPaginationPos(e.target.value)} className="dark-input w-full p-3 rounded-xl text-xs">
+              <select 
+                value={brandKit.paginationPos} 
+                onChange={(e) => updateBrandKit({ paginationPos: e.target.value })} 
+                className="dark-input w-full p-3 rounded-xl text-xs"
+              >
                 {positionOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
               </select>
             </div>
           </section>
 
-          {/* WIDGET 4: SWIPE (ARRASTE PARA O LADO) - ADICIONADO AQUI! */}
+          {/* WIDGET 4: SWIPE (ARRASTE PARA O LADO) */}
           <section className="glass-panel p-6 rounded-3xl flex flex-col border-t-2" style={{ borderTopColor: brandKit.swipeText ? brandKit.brandColor : 'transparent' }}>
             <label className="text-xs font-bold text-zinc-300 uppercase tracking-widest mb-6 block">👉 Indicador Swipe</label>
             <div className="space-y-4 mt-auto">
               <input 
                 type="text" 
                 value={brandKit.swipeText} 
-                onChange={(e) => brandKit.setSwipeText(e.target.value)} 
+                onChange={(e) => updateBrandKit({ swipeText: e.target.value })} 
                 className="dark-input w-full p-3 rounded-xl text-xs font-bold" 
                 placeholder="Ex: Arraste para o lado" 
               />
               <div className="grid grid-cols-2 gap-2">
                 <button 
-                  onClick={() => brandKit.setSwipeStyle("minimal")} 
+                  onClick={() => updateBrandKit({ swipeStyle: "minimal" })} 
                   className={`py-2 rounded-lg text-[10px] font-bold uppercase border ${brandKit.swipeStyle === "minimal" ? "border-[#d4af37] bg-[#d4af37]/10 text-[#d4af37]" : "border-zinc-800 text-zinc-500"}`}
                 >
                   Minimal
                 </button>
                 <button 
-                  onClick={() => brandKit.setSwipeStyle("pill")} 
+                  onClick={() => updateBrandKit({ swipeStyle: "pill" })} 
                   className={`py-2 rounded-lg text-[10px] font-bold uppercase border ${brandKit.swipeStyle === "pill" ? "border-[#d4af37] bg-[#d4af37]/10 text-[#d4af37]" : "border-zinc-800 text-zinc-500"}`}
                 >
                   Pílula
                 </button>
               </div>
-              <select value={brandKit.swipePos} onChange={(e) => brandKit.setSwipePos(e.target.value)} className="dark-input w-full p-3 rounded-xl text-xs">
+              <select 
+                value={brandKit.swipePos} 
+                onChange={(e) => updateBrandKit({ swipePos: e.target.value })} 
+                className="dark-input w-full p-3 rounded-xl text-xs"
+              >
                 {positionOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
               </select>
             </div>
